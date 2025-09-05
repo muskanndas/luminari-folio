@@ -1,8 +1,20 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 
 const ProjectsSection = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const projects = [
     {
       title: "E-Commerce Platform",
@@ -58,63 +70,79 @@ const ProjectsSection = () => {
   const otherProjects = projects.filter(project => !project.featured);
 
   return (
-    <section id="projects" className="py-20 bg-muted/30">
+    <section id="projects" className="py-20 bg-muted/30 relative overflow-hidden">
+      {/* Interactive Background Elements */}
+      <div 
+        className="absolute w-96 h-96 bg-primary/10 rounded-full pointer-events-none blur-3xl"
+        style={{
+          left: mousePosition.x * 0.03,
+          top: mousePosition.y * 0.02,
+          transition: 'all 0.4s ease',
+        }}
+      />
+      
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 hover:scale-105 transition-transform duration-500 cursor-default">
             Our
-            <span className="text-primary"> Projects</span>
+            <span className="text-primary animate-pulse"> Projects</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed hover:text-foreground transition-colors duration-300">
             Explore our portfolio of successful projects that showcase our expertise 
             in delivering innovative solutions across various industries.
           </p>
         </div>
 
-        {/* Featured Projects */}
+        {/* Featured Projects with Enhanced Animations */}
         <div className="mb-16">
-          <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Featured Projects</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-8 text-center hover:text-primary transition-colors duration-300">Featured Projects</h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {featuredProjects.map((project, index) => (
               <Card 
                 key={project.title}
-                className="card-hover glass border-0 overflow-hidden group animate-fade-in"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className="card-hover glass border-0 overflow-hidden group animate-fade-in interactive-card"
+                style={{ 
+                  animationDelay: `${index * 0.2}s`,
+                  transform: `translate(${mousePosition.x * 0.005 * (index + 1)}px, ${mousePosition.y * 0.005 * (index + 1)}px)`,
+                }}
               >
-                {/* Project Image */}
-                <div className="relative h-48 bg-gradient-to-br from-primary/20 to-primary/5 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-primary/10"></div>
+                {/* Project Image with 3D Effect */}
+                <div className="relative h-48 bg-gradient-to-br from-primary/20 to-primary/5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary/20 text-primary border-primary/30">
+                    <Badge className="bg-primary/20 text-primary border-primary/30 animate-pulse">
                       {project.category}
                     </Badge>
                   </div>
-                  <div className="absolute bottom-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-colors">
+                  <div className="absolute bottom-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <button className="p-2 bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-125">
                       <ExternalLink className="h-4 w-4 text-white" />
                     </button>
-                    <button className="p-2 bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-colors">
+                    <button className="p-2 bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-125">
                       <Github className="h-4 w-4 text-white" />
                     </button>
                   </div>
                 </div>
 
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                  <p className="text-muted-foreground mb-4 leading-relaxed group-hover:text-foreground transition-colors duration-300">
                     {project.description}
                   </p>
                   
-                  {/* Technologies */}
+                  {/* Technologies with Staggered Animation */}
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
+                    {project.technologies.map((tech, techIndex) => (
                       <Badge 
                         key={tech} 
                         variant="secondary" 
-                        className="text-xs bg-primary/10 text-primary border-primary/20"
+                        className="text-xs bg-primary/10 text-primary border-primary/20 hover:scale-110 transition-transform duration-300"
+                        style={{
+                          transitionDelay: `${techIndex * 0.1}s`
+                        }}
                       >
                         {tech}
                       </Badge>
@@ -128,43 +156,49 @@ const ProjectsSection = () => {
 
         {/* Other Projects */}
         <div>
-          <h3 className="text-2xl font-bold text-foreground mb-8 text-center">More Projects</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-8 text-center hover:text-primary transition-colors duration-300">More Projects</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {otherProjects.map((project, index) => (
               <Card 
                 key={project.title}
-                className="card-hover glass border-0 overflow-hidden group animate-fade-in"
-                style={{ animationDelay: `${(index + 3) * 0.1}s` }}
+                className="card-hover glass border-0 overflow-hidden group animate-fade-in interactive-card"
+                style={{ 
+                  animationDelay: `${(index + 3) * 0.1}s`,
+                  transform: `translate(${mousePosition.x * 0.002 * (index % 2 === 0 ? 1 : -1)}px, ${mousePosition.y * 0.002}px) rotateY(${mousePosition.x * 0.005}deg)`,
+                }}
               >
                 {/* Project Image */}
-                <div className="relative h-32 bg-gradient-to-br from-primary/10 to-primary/5">
+                <div className="relative h-32 bg-gradient-to-br from-primary/10 to-primary/5 group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-500">
                   <div className="absolute top-3 left-3">
-                    <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
+                    <Badge className="bg-primary/20 text-primary border-primary/30 text-xs animate-pulse">
                       {project.category}
                     </Badge>
                   </div>
                 </div>
 
                 <CardContent className="p-4">
-                  <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                     {project.title}
                   </h4>
-                  <p className="text-muted-foreground text-sm mb-3 leading-relaxed">
+                  <p className="text-muted-foreground text-sm mb-3 leading-relaxed group-hover:text-foreground transition-colors duration-300">
                     {project.description}
                   </p>
                   
                   <div className="flex flex-wrap gap-1">
-                    {project.technologies.slice(0, 3).map((tech) => (
+                    {project.technologies.slice(0, 3).map((tech, techIndex) => (
                       <Badge 
                         key={tech} 
                         variant="secondary" 
-                        className="text-xs bg-primary/10 text-primary border-primary/20"
+                        className="text-xs bg-primary/10 text-primary border-primary/20 hover:scale-110 transition-transform duration-300"
+                        style={{
+                          transitionDelay: `${techIndex * 0.1}s`
+                        }}
                       >
                         {tech}
                       </Badge>
                     ))}
                     {project.technologies.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs hover:scale-110 transition-transform duration-300">
                         +{project.technologies.length - 3}
                       </Badge>
                     )}
@@ -175,18 +209,18 @@ const ProjectsSection = () => {
           </div>
         </div>
 
-        {/* Call to Action */}
+        {/* Call to Action with Magnetic Effect */}
         <div className="text-center mt-16 animate-fade-in">
-          <h3 className="text-2xl font-bold text-foreground mb-4">
+          <h3 className="text-2xl font-bold text-foreground mb-4 hover:text-primary transition-colors duration-300">
             Have a Project in Mind?
           </h3>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
             We'd love to help bring your vision to life. Let's discuss your project 
             and explore how we can create something amazing together.
           </p>
           <button
             onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="btn-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold"
+            className="btn-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:scale-110 transition-transform duration-300 interactive-card"
           >
             Start Your Project
           </button>

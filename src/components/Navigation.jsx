@@ -6,13 +6,24 @@ import logo from "@/assets/logo.png";
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   const navItems = [
@@ -24,7 +35,7 @@ const Navigation = () => {
     { name: "Contact", href: "#contact" },
   ];
 
-  const scrollToSection = (href: string) => {
+  const scrollToSection = (href) => {
     const element = document.querySelector(href);
     element?.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
@@ -37,60 +48,75 @@ const Navigation = () => {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <img src={logo} alt="Company Logo" className="h-10 w-10" />
-          <span className="text-xl font-bold text-foreground">TechFlow</span>
+        {/* Logo with Mouse Interaction */}
+        <div 
+          className="flex items-center space-x-2 hover:scale-110 transition-transform duration-300 cursor-pointer"
+          style={{
+            transform: `translate(${mousePosition.x * 0.001}px, ${mousePosition.y * 0.001}px)`,
+          }}
+        >
+          <img 
+            src={logo} 
+            alt="Company Logo" 
+            className="h-10 w-10 hover:rotate-12 transition-transform duration-300" 
+          />
+          <span className="text-xl font-bold text-foreground hover:text-primary transition-colors duration-300">TechFlow</span>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation with Enhanced Animations */}
         <div className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <button
               key={item.name}
               onClick={() => scrollToSection(item.href)}
-              className="nav-link text-foreground hover:text-primary font-medium"
+              className="nav-link text-foreground hover:text-primary font-medium hover:scale-110 transition-all duration-300"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+              }}
             >
               {item.name}
             </button>
           ))}
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button with Magnetic Effect */}
         <div className="hidden md:block">
           <Button 
             onClick={() => scrollToSection("#contact")}
-            className="btn-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold"
+            className="btn-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold hover:scale-110 transition-transform duration-300 interactive-card"
           >
             Get Started
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button with Animation */}
         <button
-          className="md:hidden text-foreground p-2"
+          className="md:hidden text-foreground p-2 hover:scale-110 hover:rotate-90 transition-all duration-300"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with Slide Animation */}
       {isMobileMenuOpen && (
         <div className="md:hidden glass mt-2 mx-4 rounded-lg p-4 shadow-lg animate-fade-in">
           <div className="flex flex-col space-y-4">
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-left text-foreground hover:text-primary font-medium py-2"
+                className="text-left text-foreground hover:text-primary font-medium py-2 hover:scale-105 hover:translate-x-2 transition-all duration-300"
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                }}
               >
                 {item.name}
               </button>
             ))}
             <Button 
               onClick={() => scrollToSection("#contact")}
-              className="btn-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold mt-4"
+              className="btn-primary text-primary-foreground px-6 py-2 rounded-lg font-semibold mt-4 hover:scale-105 transition-transform duration-300"
             >
               Get Started
             </Button>

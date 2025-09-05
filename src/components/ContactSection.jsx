@@ -25,18 +25,17 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     toast({
@@ -57,7 +56,7 @@ const ContactSection = () => {
     },
     {
       icon: Phone,
-      title: "Phone",
+      title: "Phone", 
       content: "+1 (555) 123-4567",
       action: "tel:+15551234567"
     },
@@ -78,11 +77,10 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 hover:scale-105 transition-transform duration-500">
             Get In
-            <span className="text-primary"> Touch</span>
+            <span className="text-primary animate-pulse"> Touch</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Ready to start your project? We'd love to hear from you. 
@@ -91,9 +89,8 @@ const ContactSection = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
-          {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card className="glass border-0 animate-fade-in">
+            <Card className="glass border-0 animate-fade-in interactive-card">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold text-foreground mb-6">Send Us a Message</h3>
                 
@@ -110,7 +107,7 @@ const ContactSection = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="John Doe"
-                        className="h-12 border-border focus:border-primary"
+                        className="h-12 border-border focus:border-primary hover:scale-105 transition-transform duration-200"
                       />
                     </div>
                     
@@ -126,7 +123,7 @@ const ContactSection = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="john@example.com"
-                        className="h-12 border-border focus:border-primary"
+                        className="h-12 border-border focus:border-primary hover:scale-105 transition-transform duration-200"
                       />
                     </div>
                   </div>
@@ -142,14 +139,14 @@ const ContactSection = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Tell us about your project, goals, and requirements..."
-                      className="min-h-32 border-border focus:border-primary resize-none"
+                      className="min-h-32 border-border focus:border-primary resize-none hover:scale-105 transition-transform duration-200"
                     />
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary text-primary-foreground px-8 py-3 h-12 w-full md:w-auto font-semibold rounded-lg group"
+                    className="btn-primary text-primary-foreground px-8 py-3 h-12 w-full md:w-auto font-semibold rounded-lg group hover:scale-110 transition-transform duration-300"
                   >
                     {isSubmitting ? (
                       <>
@@ -165,19 +162,18 @@ const ContactSection = () => {
                   </Button>
                 </form>
 
-                {/* Features */}
                 <div className="mt-8 pt-8 border-t border-border">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200">
+                      <CheckCircle className="h-5 w-5 text-primary animate-pulse" />
                       <span className="text-sm text-muted-foreground">24h Response Time</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200">
+                      <CheckCircle className="h-5 w-5 text-primary animate-pulse" />
                       <span className="text-sm text-muted-foreground">Free Consultation</span>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200">
+                      <CheckCircle className="h-5 w-5 text-primary animate-pulse" />
                       <span className="text-sm text-muted-foreground">NDA Available</span>
                     </div>
                   </div>
@@ -186,18 +182,16 @@ const ContactSection = () => {
             </Card>
           </div>
 
-          {/* Contact Information */}
           <div className="space-y-6">
-            {/* Contact Info Cards */}
             {contactInfo.map((info, index) => (
               <Card 
                 key={info.title}
-                className="card-hover glass border-0 animate-fade-in"
+                className="card-hover glass border-0 animate-fade-in interactive-card"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="bg-primary/10 p-3 rounded-xl">
+                    <div className="bg-primary/10 p-3 rounded-xl hover:bg-primary/20 hover:scale-110 transition-all duration-300">
                       <info.icon className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1">
@@ -218,36 +212,25 @@ const ContactSection = () => {
               </Card>
             ))}
 
-            {/* Social Media */}
             <Card className="glass border-0 animate-fade-in" style={{ animationDelay: "0.4s" }}>
               <CardContent className="p-6">
                 <h4 className="font-bold text-foreground mb-4">Follow Us</h4>
                 <div className="flex space-x-4">
                   <a 
                     href="#"
-                    className="p-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-colors group"
+                    className="p-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-all duration-300 group hover:scale-125"
                   >
-                    <Linkedin className="h-6 w-6 group-hover:scale-110 transition-transform" />
+                    <Linkedin className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                   </a>
                   <a 
                     href="#"
-                    className="p-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-colors group"
+                    className="p-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-all duration-300 group hover:scale-125"
                   >
-                    <Instagram className="h-6 w-6 group-hover:scale-110 transition-transform" />
+                    <Instagram className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                   </a>
                 </div>
                 <p className="text-muted-foreground text-sm mt-4">
                   Stay updated with our latest projects and tech insights.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Quick Response Promise */}
-            <Card className="bg-dark-bg border-0 animate-fade-in" style={{ animationDelay: "0.5s" }}>
-              <CardContent className="p-6 text-center">
-                <h4 className="font-bold text-white mb-2">Quick Response Guarantee</h4>
-                <p className="text-white/80 text-sm">
-                  We typically respond to all inquiries within 2-4 hours during business hours.
                 </p>
               </CardContent>
             </Card>
